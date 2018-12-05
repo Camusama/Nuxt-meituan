@@ -7,7 +7,9 @@
       <el-col :span="4">
         <div class="m-life-pic"/>
       </el-col>
-      <el-col :span="6">
+      <el-col
+        v-if="!user"
+        :span="6">
         <div class="m-life-login">
           <h4>
             <img
@@ -31,6 +33,34 @@
               </el-button>
             </nuxt-link>
           </p>
+        </div>
+      </el-col>
+      <el-col
+        v-if="user"
+        :span="6">
+        <div class="m-life-login">
+          <h4>
+            <img
+              src="//s0.meituan.net/bs/fe-web-meituan/2d05c2b/img/avatar.jpg"
+              alt="">
+          </h4>
+          <p class="m-life-login-name">Hi！{{ user }}</p>
+          <p>
+            <nuxt-link to="/order">
+              <el-button
+                round
+                size="medium">我的订单
+              </el-button>
+            </nuxt-link>
+          </p>
+          <!--<p>-->
+          <!--<nuxt-link to="/login">-->
+          <!--<el-button-->
+          <!--round-->
+          <!--size="medium">立即登录-->
+          <!--</el-button>-->
+          <!--</nuxt-link>-->
+          <!--</p>-->
         </div>
       </el-col>
     </el-row>
@@ -66,6 +96,17 @@
   export default {
     components: {
       Slider
+    },
+    data:()=>{
+      return{
+          user:''
+      }
+    },
+    async mounted () {
+      const { status, data: { user } } = await this.$axios.get('/users/getUser').then()
+      if (status === 200) {
+        this.user = user
+      }
     }
   }
 </script>

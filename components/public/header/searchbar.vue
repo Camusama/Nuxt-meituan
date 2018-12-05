@@ -6,7 +6,8 @@
         class="left">
         <img
           src="//s0.meituan.net/bs/fe-web-meituan/e5eeaef/img/logo.png"
-          alt="美团">
+          alt="美团"
+          @click="toIndex">
       </el-col>
       <el-col
         :span="15"
@@ -155,6 +156,9 @@
       },
       searchProduct () {
         window.location.href = `/products?keyword=${encodeURIComponent(this.search)}`
+      },
+      toIndex () {
+        window.location.href = '/'
       }
     }
   }
