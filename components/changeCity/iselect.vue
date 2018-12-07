@@ -8,7 +8,8 @@
         v-for="item in province"
         :key="item.value"
         :label="item.label"
-        :value="item.value"/>
+        :value="item.value"
+        @click.native="changeProvince(item)"/>
     </el-select>
     <el-select
       v-model="cvalue"
@@ -18,7 +19,8 @@
         v-for="item in city"
         :key="item.value"
         :label="item.label"
-        :value="item.value"/>
+        :value="item.value"
+        @click.native="changeCity(item)"/>
     </el-select>
     <el-autocomplete
       v-model="input"
@@ -38,7 +40,8 @@
         city: [],
         cvalue: '',
         input: '',
-        cities: ''
+        cities: '',
+        pname:''
       }
     },
     watch: {
@@ -93,8 +96,17 @@
           }
         }
       },
-      handleSelect (item) {
-        console.log(item.value)
+      handleSelect () {
+        this.$store.commit('geo/setPosition',this.input)
+        window.location.href='/'
+      },
+      changeCity(item){
+        let newCity=item.label==='市辖区'?this.pname:item.label
+        this.$store.commit('geo/setPosition',newCity)
+        window.location.href='/'
+      },
+      changeProvince(item){
+        this.pname=item.label
       }
     }
   }

@@ -16,7 +16,9 @@
       <dd>
         <span
           v-for="c in item.city"
-          :key="c">{{ c }}</span>
+          :key="c"
+          class="city"
+          @click="changeCity(c)">{{ c }}</span>
       </dd>
     </dl>
   </div>
@@ -62,10 +64,22 @@
         blocks.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0))
         this.block = blocks
       }
+    },
+    methods:{
+      changeCity(c){
+        this.$store.commit('geo/setPosition',c)
+        window.location.href='/'
+      }
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "~/assets/css/changeCity/categroy.scss";
+  .city{
+    cursor: pointer;
+    &:hover {
+      color:#13D1BE !important;
+    }
+  }
 </style>

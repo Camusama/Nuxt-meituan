@@ -25,6 +25,12 @@
       Emenu,
       Life,
       Artistic
+    },
+    mounted(){
+      let city=this.$store.getters['geo/city']
+      if(!city){
+        window.location.href='/changeCity'
+      }
     }
   }
 </script>

@@ -1,5 +1,9 @@
 <template>
-  <div class="page-detail">
+  <div
+    v-loading="loading"
+    class="page-detail"
+    element-loading-text="加载中"
+    element-loading-background="#fff">
     <el-row>
       <el-col :span="24">
         <crumbs
@@ -51,6 +55,16 @@
       Summa,
       List
     },
+    data(){
+      return{
+        keyword:'',
+        product: {},
+        type:'',
+        list: [],
+        login: false,
+        loading:true
+      }
+    },
     computed: {
       // 根据数据是否有效来计算是否能购买
       // 能购买状态指的是整个detail下面的大框，所以未登录状态不知道能否购买，也显示这个框，v-else提示登录
@@ -58,34 +72,59 @@
         return this.list.filter(item => item.photos.length).length
       }
     },
-    async asyncData (ctx) {
-      // 客户端拿不到请求参数，只能在服务器端拿到参数keyword和type
-      let { keyword, type } = ctx.query
-      let { status, data: { product, more: list, login } } = await ctx.$axios.get('/search/products', {
+    async mounted(){
+      let { keyword, type } = this.$route.query
+      let { status, data: { product, more: list, login } } = await this.$axios.get('/search/products', {
         params: {
           keyword,
           type,
-          city: ctx.store.state.geo.position.city
+          city: this.$store.getters['geo/city']
         }
       })
       if (status === 200) {
-        return {
-          keyword,
-          product,
-          type,
-          list,
-          login
-        }
+          this.keyword=keyword,
+          this.product=product,
+          this.type=type,
+          this.list=list,
+          this.login=login
       } else {
-        return {
-          keyword,
-          product: {},
-          type,
-          list: [],
-          login: false
-        }
+          this.keyword=keyword,
+          this.product={},
+          this.type=type,
+          this.list=[],
+          this.login= false
       }
-    }
+      this.loading=false
+    },
+    // async asyncData (ctx) {
+    //   // 客户端拿不到请求参数，只能在服务器端拿到参数keyword和type
+    //   let { keyword, type } = ctx.query
+    //   let { status, data: { product, more: list, login } } = await ctx.$axios.get('/search/products', {
+    //     params: {
+    //       keyword,
+    //       type,
+    //       // city: ctx.store.state.geo.position.city
+    //       city:ctx.store.getters['geo/city']
+    //     }
+    //   })
+    //   if (status === 200) {
+    //     return {
+    //       keyword,
+    //       product,
+    //       type,
+    //       list,
+    //       login
+    //     }
+    //   } else {
+    //     return {
+    //       keyword,
+    //       product: {},
+    //       type,
+    //       list: [],
+    //       login: false
+    //     }
+    //   }
+    // }
   }
 </script>
 

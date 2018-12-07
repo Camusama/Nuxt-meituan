@@ -29,7 +29,7 @@
             class="hotPlace">
             <dt>热门搜索</dt>
             <dd
-              v-for="(item, index) of $store.state.home.hotPlace.slice(0,5)"
+              v-for="(item, index) of hotPlace.slice(0,5)"
               :key="index">
               <a :href="'/products?keyword='+encodeURIComponent(item.name)">{{ item.name }}</a>
             </dd>
@@ -46,7 +46,7 @@
         </div>
         <p class="suggest">
           <a
-            v-for="(item, index) of $store.state.home.hotPlace.slice(0,5)"
+            v-for="(item, index) of hotPlace.slice(0,5)"
             :key="index"
             :href="'/products?keyword='+encodeURIComponent(item.name)"
           >{{ item.name }}</a>
@@ -126,6 +126,14 @@
         return this.isFocus && this.search
       }
     },
+    async mounted(){
+      let {status: status3, data: {result}} = await this.$axios.get('/search/hotPlace', {
+        params: {
+          city: this.$store.getters['geo/city']
+        }
+      })
+      this.hotPlace=result
+    },
     methods: {
       focus () {
         this.isFocus = true
@@ -140,7 +148,7 @@
           clearTimeout(this.timer)
         }
         this.timer = setTimeout(async () => {
-          let city = this.$store.state.geo.position.city.replace('市', '')
+          let city = this.$store.getters['geo/city']
           this.searchList = []
           if (!this.search) {
             return

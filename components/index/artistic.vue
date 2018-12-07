@@ -28,10 +28,12 @@
         keyword="旅游">品质出游
       </dd>
     </dl>
-    <ul class="ibody">
+    <ul
+      class="ibody"
+      style="height: 964px">
       <li
         v-for="item in cur"
-        :key="item.title">
+        :key="item.img">
         <a :href="'/detail?keyword='+encodeURIComponent(item.title)+'&type='+encodeURIComponent(item.pos)">
           <el-card
             :body-style="{ padding: '0px' }"
@@ -42,7 +44,7 @@
             <ul class="cbody">
               <li class="title">{{ item.title }}</li>
               <li class="pos"><span>{{ item.pos }}</span></li>
-              <li class="price">￥<em>{{ item.price }}</em><span>/起</span></li>
+              <li class="price"><span><em>{{ item.price.toString()==='' ? '暂无' : '￥'+item.price+'/起' }}</em></span></li>
             </ul>
           </el-card>
         </a>
@@ -74,7 +76,8 @@
       let { status, data: { count, pois } } = await this.$axios.get('/search/resultsByKeywords', {
         params: {
           keyword: '景点',
-          city: this.$store.state.geo.position.city
+          // city: this.$store.state.geo.position.city
+          city:this.$store.getters['geo/city']
         }
       })
       if (status === 200 && count > 0) {
@@ -102,7 +105,7 @@
           let { status, data: { count, pois } } = await this.$axios.get('/search/resultsByKeywords', {
             params: {
               keyword,
-              city: this.$store.state.geo.position.city
+              city: this.$store.getters['geo/city']
             }
           })
           if (status === 200 && count > 0) {

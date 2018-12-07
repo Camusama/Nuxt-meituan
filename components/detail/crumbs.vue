@@ -1,9 +1,9 @@
 <template>
   <div class="m-crumbs">
     <el-breadcrumb separator=">">
-      <el-breadcrumb-item :to="{ path: '/' }">{{ $store.state.geo.position.city.replace('市','') }}美团</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/' }">{{ $store.state.geo.position.city.replace('市','') }}{{ type }}</el-breadcrumb-item>
-      <el-breadcrumb-item><a href="/">{{ $store.state.geo.position.city.replace('市','') }}{{ decodeURIComponent(keyword) }}</a></el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{ city }}美团</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{ city }}{{ type }}</el-breadcrumb-item>
+      <el-breadcrumb-item><a href="/">{{ city }}{{ decodeURIComponent(keyword) }}</a></el-breadcrumb-item>
     </el-breadcrumb>
   </div>
 </template>
@@ -19,6 +19,15 @@ export default {
       type:String,
       default:''
     }
+  },
+  data(){
+    return{
+      city:''
+    }
+  },
+  mounted(){
+    let ncity=this.$store.getters['geo/city']
+    this.city=ncity
   }
 }
 </script>

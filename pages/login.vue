@@ -21,9 +21,15 @@
           {{ error }}
         </h4>
         <p><span>账号登录</span></p>
-        <el-input
-          v-model="username"
-          prefix-icon="profile"/>
+        <el-tooltip
+          class="item"
+          effect="light"
+          content="测试账号：admin密码：admin，可注册新号"
+          placement="right-end">
+          <el-input
+            v-model="username"
+            prefix-icon="profile"/>
+        </el-tooltip>
         <el-input
           v-model="password"
           prefix-icon="password"

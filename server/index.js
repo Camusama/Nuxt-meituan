@@ -13,7 +13,7 @@ import geo from './dbs/interface/geo'
 import search from './dbs/interface/search'
 import categroy from './dbs/interface/categroy'
 import cart from './dbs/interface/cart'
-
+import order from './dbs/interface/order'
 
 const Koa = require('koa')
 const consola = require('consola')
@@ -61,6 +61,7 @@ async function start() {
   app.use(search.routes()).use(search.allowedMethods())
   app.use(categroy.routes()).use(categroy.allowedMethods())
   app.use(cart.routes()).use(cart.allowedMethods())
+  app.use(order.routes()).use(order.allowedMethods())
 
 
   app.use(ctx => {

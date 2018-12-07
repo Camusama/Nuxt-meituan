@@ -1,15 +1,44 @@
 <template>
+  <!--<dl class="m-sum-card">-->
+  <!--<dt>-->
+  <!--<h1>{{ meta.name }}</h1>-->
+  <!--<el-rate-->
+  <!--v-model="rate"-->
+  <!--disabled />-->
+  <!--<span>{{ Number(meta.biz_ext.rating)||rate }}分</span>-->
+  <!--<span>人均￥{{ Number(meta.biz_ext.cost)||'0' }}</span>-->
+  <!--<ul>-->
+  <!--<li @click="openMap(meta.location)">地址：{{ meta.address }}</li>-->
+  <!--<li>电话：{{ meta.tel }}</li>-->
+  <!--</ul>-->
+  <!--</dt>-->
+  <!--<dd>-->
+  <!--<el-carousel-->
+  <!--height="214px"-->
+  <!--indicator-position="none">-->
+  <!--<el-carousel-item-->
+  <!--v-for="(item,idx) in meta.photos"-->
+  <!--:key="idx">-->
+  <!--<h3><img-->
+  <!--:src="item.url"-->
+  <!--alt="item.title"-->
+  <!--width="100%"-->
+  <!--height="100%"></h3>-->
+  <!--</el-carousel-item>-->
+  <!--</el-carousel>-->
+  <!--</dd>-->
+  <!--</dl>-->
   <dl class="m-sum-card">
     <dt>
-      <h1>{{ meta.name }}</h1>
+      <h1>{{ detail.name }}</h1>
       <el-rate
         v-model="rate"
         disabled />
-      <span>{{ Number(meta.biz_ext.rating)||rate }}分</span>
-      <span>人均￥{{ Number(meta.biz_ext.cost) }}</span>
+      <span>{{ Number(detail.biz_ext.rating)||rate }}分</span>
+      <span>人均￥{{ Number(detail.biz_ext.cost)||'0' }}</span>
       <ul>
-        <li @click="openMap(meta.location)">地址：{{ meta.address }}</li>
-        <li>电话：{{ meta.tel }}</li>
+        <li @click="openMap(detail.location)">地址：{{ detail.address }}</li>
+        <li>电话：{{ detail.tel.toString()===''?'无' :detail.tel }}</li>
       </ul>
     </dt>
     <dd>
@@ -36,18 +65,43 @@ export default {
     meta: {
       type:Object,
       default:()=>{
-        return {}
+        return {
+        }
       }
     }
   },
-  data() {
-    return {
+  data(){
+    return{
+      detail:{
+        name:'',
+        biz_ext:{
+          rating:0,
+          cost:0
+        },
+        address:'',
+        tel:''
+      },
       sale: 70 + Math.floor(Math.random() * 300)
     }
   },
   computed: {
     rate: function () {
-      return Number(this.meta.biz_ext.rating) || Math.floor(Math.random() * 5)
+      return Number(this.detail.biz_ext.rating)||Math.floor(Math.random() * 5)
+    }
+  },
+  async mounted(){
+    let { keyword, type } = this.$route.query
+    let { status, data: { product } } = await this.$axios.get('/search/products', {
+      params: {
+        keyword,
+        type,
+        city: this.$store.getters['geo/city']
+      }
+    })
+    if (status === 200) {
+      this.detail=product
+    } else {
+      console.log(this.product)
     }
   },
   methods: {
